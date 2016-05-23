@@ -1,5 +1,5 @@
 ---
-services: app-service\web
+services: app-service\web, app-service
 platforms: html
 author: cephalin
 ---
