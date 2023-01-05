@@ -21,6 +21,9 @@ steps:
     SourceFolder: './'
     Contents: '**'
     TargetFolder: '$(System.DefaultWorkingDirectory)'
+  
+- publish: $(System.DefaultWorkingDirectory)
+  artifact: build-artifact
 
 - task: AzureRmWebAppDeployment@4
   inputs:
