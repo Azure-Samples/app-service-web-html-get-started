@@ -2,7 +2,10 @@ resources:
   pipelines:
   - pipeline: adnoccitrigger
     source: Adnoc-CI 
-    trigger: true 
+    trigger:  
+      branches:
+        include: 
+        - development
 
 pool:
   vmImage: ubuntu-latest
