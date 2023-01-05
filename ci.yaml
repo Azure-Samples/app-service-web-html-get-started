@@ -19,8 +19,13 @@ stages:
       inputs:
         SourceFolder: './'
         Contents: '**'
-        TargetFolder: '$(System.DefaultWorkingDirectory)'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
       
-    - publish: $(System.DefaultWorkingDirectory)
+    - publish: $(Build.ArtifactStagingDirectory)
       artifact: build-artifact
 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
