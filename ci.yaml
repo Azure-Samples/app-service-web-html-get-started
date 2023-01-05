@@ -27,3 +27,29 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+
+- stage: Deploy_To_Dev
+  dependsOn: Build
+  jobs:
+  - job: CD_DEV
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
+        appType: 'webApp'
+        WebAppName: 'devadnocapp'
+        packageForLinux: '$(System.DefaultWorkingDirectory)'
+
+- stage: Deploy_To_Prod
+  condition: contains(variables['build.sourceBranch'], 'refs/heads/master')
+  jobs:
+  - job: CD_PROD
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
+        appType: 'webApp'
+        WebAppName: 'prdadnocapp'
+        packageForLinux: '$(System.DefaultWorkingDirectory)'
