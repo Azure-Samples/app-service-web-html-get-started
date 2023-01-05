@@ -4,46 +4,22 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- development
 
 pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: Build
-  jobs:
-  - job: CI
-
-    steps:
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: './'
-        Contents: '**'
-        TargetFolder: '$(System.DefaultWorkingDirectory)'
-      
-    - publish: $(System.DefaultWorkingDirectory)
-      artifact: build-artifact
-
 - stage: Deploy_To_Dev
   jobs:
   - job: CD_DEV
     steps:
+    - download: current
+      artifact: Adnoc-CI
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
         azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
         appType: 'webApp'
         WebAppName: 'devadnocapp'
-        packageForLinux: '$(System.DefaultWorkingDirectory)'
-
-- stage: Deploy_To_Prod
-  jobs:
-  - job: CD_PROD
-    steps:
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
-        appType: 'webApp'
-        WebAppName: 'prdadnocapp'
         packageForLinux: '$(System.DefaultWorkingDirectory)'
