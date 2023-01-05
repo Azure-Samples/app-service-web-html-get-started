@@ -24,9 +24,9 @@ stages:
     - publish: $(System.DefaultWorkingDirectory)
       artifact: build-artifact
 
-- stage: Deploy
+- stage: Deploy_To_Dev
   jobs:
-  - job: CD-Dev
+  - job: CD_Dev
     steps:
     - task: AzureRmWebAppDeployment@4
       inputs:
