@@ -10,11 +10,17 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: ArchiveFiles@2
+# - task: ArchiveFiles@2
+#   inputs:
+#     rootFolderOrFile: '$(build.sourcesDirectory)'
+#     includeRootFolder: false
+# - task: PublishBuildArtifacts@1
+
+- task: CopyFiles@2
   inputs:
-    rootFolderOrFile: '$(build.sourcesDirectory)'
-    includeRootFolder: false
-- task: PublishBuildArtifacts@1
+    SourceFolder: './'
+    Contents: '**'
+    TargetFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: AzureRmWebAppDeployment@4
   inputs:
@@ -22,4 +28,4 @@ steps:
     azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
     appType: 'webApp'
     WebAppName: 'devadnocapp'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(System.DefaultWorkingDirectory)'
