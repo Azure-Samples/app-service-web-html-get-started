@@ -1,10 +1,8 @@
-# HTML
-# Archive your static HTML project and save it with the build record.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- development
+resources:
+  pipelines:
+  - pipeline: securitylib 
+    source: Adnoc-CI 
+    trigger: true 
 
 pool:
   vmImage: ubuntu-latest
@@ -30,3 +28,25 @@ stages:
         appType: 'webApp'
         WebAppName: 'devadnocapp'
         packageForLinux: '$(System.DefaultWorkingDirectory)'
+  
+- stage: Deploy_To_Prod
+  jobs:
+  - job: CD_PROD
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'specific'
+        project: '4e02bc03-982b-4494-9a4e-c7f8ef568388'
+        pipeline: '6'
+        buildVersionToDownload: 'latest'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
+        appType: 'webApp'
+        WebAppName: 'prdadnocapp'
+        packageForLinux: '$(System.DefaultWorkingDirectory)'
+  
