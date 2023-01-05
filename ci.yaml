@@ -21,8 +21,6 @@ stages:
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
       
-    - publish: $(Build.ArtifactStagingDirectory)
-      artifact: build-artifact
 
     - task: PublishBuildArtifacts@1
       inputs:
