@@ -9,26 +9,29 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-# - task: ArchiveFiles@2
-#   inputs:
-#     rootFolderOrFile: '$(build.sourcesDirectory)'
-#     includeRootFolder: false
-# - task: PublishBuildArtifacts@1
+stages:
+- stage: Build
+  jobs:
+  - job: CI
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: './'
-    Contents: '**'
-    TargetFolder: '$(System.DefaultWorkingDirectory)'
-  
-- publish: $(System.DefaultWorkingDirectory)
-  artifact: build-artifact
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: './'
+        Contents: '**'
+        TargetFolder: '$(System.DefaultWorkingDirectory)'
+      
+    - publish: $(System.DefaultWorkingDirectory)
+      artifact: build-artifact
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
-    appType: 'webApp'
-    WebAppName: 'devadnocapp'
-    packageForLinux: '$(System.DefaultWorkingDirectory)'
+- stage: Deploy
+  jobs:
+  - job: CD-Dev
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Visual Studio Enterprise Subscription(b214611b-9a79-4e7e-afb0-3d9785737f10)'
+        appType: 'webApp'
+        WebAppName: 'devadnocapp'
+        packageForLinux: '$(System.DefaultWorkingDirectory)'
