@@ -14,8 +14,11 @@ stages:
   jobs:
   - job: CD_DEV
     steps:
-    - download: current
-      artifact: Adnoc-CI
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
