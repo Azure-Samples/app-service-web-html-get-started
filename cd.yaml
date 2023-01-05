@@ -16,9 +16,13 @@ stages:
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
-        buildType: 'current'
+        buildType: 'specific'
+        project: '4e02bc03-982b-4494-9a4e-c7f8ef568388'
+        pipeline: '6'
+        buildVersionToDownload: 'latest'
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
+    
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
