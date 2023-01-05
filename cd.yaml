@@ -1,6 +1,6 @@
 resources:
   pipelines:
-  - pipeline: securitylib 
+  - pipeline: adnoccitrigger
     source: Adnoc-CI 
     trigger: true 
 
